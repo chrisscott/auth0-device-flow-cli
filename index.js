@@ -2,6 +2,7 @@ const qrcode = require("qrcode-terminal");
 const { red, bold, italic } = require("chalk");
 const got = require("got");
 const { Issuer } = require("openid-client");
+require('dotenv').config();
 
 if (
   !process.env.AUTH0_DOMAIN ||
@@ -9,7 +10,7 @@ if (
   !process.env.AUTH0_AUDIENCE
 ) {
   throw new Error(
-    "AUTH0_DOMAIN and AUTH0_AUDIENCE must be defined in your environment"
+    "AUTH0_DOMAIN, AUTH0_CLIENT_ID, and AUTH0_AUDIENCE must be defined in your environment"
   );
 }
 
@@ -46,7 +47,7 @@ const AUDIENCE = process.env.AUTH0_AUDIENCE;
     .post(device_authorization_endpoint, { json: request })
     .json();
 
-  log(`Open ${bold(response.verification_uri)} and enter:`);
+  log(`Open ${bold(response.verification_uri_complete)} and enter:`);
   log(bold(response.user_code.split("").join(" ")));
   log(italic("note: you may omit whitespace and special characters"));
   log(italic("      like dashes. You may also enter lowercase."));
